@@ -1,0 +1,1284 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>LM Check - Compliance Dashboard</title>
+
+    <!-- Google Font -->
+    <link rel="preconnect"
+        href="https://fonts.googleapis.com">
+
+    <link rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <!-- Dashboard CSS -->
+    <link rel="stylesheet" href="dashbord.css">
+</head>
+
+<body>
+
+<!-- =====================================================
+     TOP NAVIGATION
+===================================================== -->
+
+<header class="top-navbar">
+
+    <div class="brand">
+
+        <div class="brand-icon">
+            <i class="fa-solid fa-scale-balanced"></i>
+        </div>
+
+        <div class="brand-text">
+
+            <h2>LM Check</h2>
+
+            <span>
+                Legal Metrology Compliance
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <nav class="top-navigation">
+
+        <button
+            class="nav-item active"
+            data-section="dashboard">
+
+            <i class="fa-solid fa-house"></i>
+
+            <span>Dashboard</span>
+
+        </button>
+
+
+        <button
+            class="nav-item"
+            data-section="scan">
+
+            <i class="fa-solid fa-camera"></i>
+
+            <span>Scan Product</span>
+
+        </button>
+
+
+        <!-- REPORT + HISTORY COMBINED -->
+
+        <button
+            class="nav-item"
+            data-section="reports">
+
+            <i class="fa-solid fa-file-lines"></i>
+
+            <span>Inspection Reports</span>
+
+        </button>
+
+
+        <button
+            class="nav-item"
+            data-section="profile">
+
+            <i class="fa-solid fa-user"></i>
+
+            <span>Profile</span>
+
+        </button>
+
+    </nav>
+
+
+    <div class="user-area">
+
+        <button class="notification-button">
+
+            <i class="fa-regular fa-bell"></i>
+
+            <span class="notification-dot"></span>
+
+        </button>
+
+
+        <div class="user-profile">
+
+            <div class="avatar">
+
+                <i class="fa-solid fa-user"></i>
+
+            </div>
+
+
+            <div class="user-details">
+
+                <strong id="topUserName">
+                    Inspector
+                </strong>
+
+                <span id="topUserRole">
+                    Inspector
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <button
+            class="logout-button"
+            id="logoutButton">
+
+            <i class="fa-solid fa-right-from-bracket"></i>
+
+        </button>
+
+    </div>
+
+
+    <button
+        class="mobile-menu-button"
+        id="mobileMenuButton">
+
+        <i class="fa-solid fa-bars"></i>
+
+    </button>
+
+</header>
+
+
+<!-- =====================================================
+     MOBILE NAVIGATION
+===================================================== -->
+
+<div
+    class="mobile-navigation"
+    id="mobileNavigation">
+
+    <button data-section="dashboard">
+
+        <i class="fa-solid fa-house"></i>
+
+        Dashboard
+
+    </button>
+
+
+    <button data-section="scan">
+
+        <i class="fa-solid fa-camera"></i>
+
+        Scan Product
+
+    </button>
+
+
+    <button data-section="reports">
+
+        <i class="fa-solid fa-file-lines"></i>
+
+        Inspection Reports
+
+    </button>
+
+
+    <button data-section="profile">
+
+        <i class="fa-solid fa-user"></i>
+
+        Profile
+
+    </button>
+
+</div>
+
+
+<!-- =====================================================
+     MAIN CONTENT
+===================================================== -->
+
+<main class="main-content">
+
+
+<!-- =====================================================
+     DASHBOARD
+===================================================== -->
+
+<section
+    id="dashboard"
+    class="page-section active-section">
+
+
+    <div class="page-header">
+
+        <div>
+
+            <h1>Dashboard</h1>
+
+            <p>
+                Monitor product compliance and inspections
+            </p>
+
+        </div>
+
+
+        <button
+            class="primary-button"
+            data-section="scan">
+
+            <i class="fa-solid fa-camera"></i>
+
+            Scan Product
+
+        </button>
+
+    </div>
+
+
+    <!-- WELCOME -->
+
+    <div class="welcome-card">
+
+        <div class="welcome-content">
+
+            <span class="welcome-label">
+                INSPECTION OVERVIEW
+            </span>
+
+            <h2>
+
+                Welcome back,
+
+                <span id="welcomeUserName">
+                    Inspector
+                </span>
+
+                ! 👋
+
+            </h2>
+
+            <p>
+                Quickly scan packaged commodities and
+                verify their compliance with Legal Metrology
+                requirements.
+            </p>
+
+        </div>
+
+
+        <div class="welcome-icon">
+
+            <i class="fa-solid fa-scale-balanced"></i>
+
+        </div>
+
+    </div>
+
+
+    <!-- STATISTICS -->
+
+    <div class="stats-grid">
+
+
+        <div class="stat-card">
+
+            <div class="stat-icon blue">
+
+                <i class="fa-solid fa-box"></i>
+
+            </div>
+
+            <div>
+
+                <span>Total Inspections</span>
+
+                <strong id="totalInspections">
+                    0
+                </strong>
+
+                <small>
+                    All inspections
+                </small>
+
+            </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-icon green">
+
+                <i class="fa-solid fa-circle-check"></i>
+
+            </div>
+
+            <div>
+
+                <span>Compliant</span>
+
+                <strong id="compliantCount">
+                    0
+                </strong>
+
+                <small>
+                    Products passed
+                </small>
+
+            </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-icon red">
+
+                <i class="fa-solid fa-circle-xmark"></i>
+
+            </div>
+
+            <div>
+
+                <span>Non-Compliant</span>
+
+                <strong id="nonCompliantCount">
+                    0
+                </strong>
+
+                <small>
+                    Products failed
+                </small>
+
+            </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-icon orange">
+
+                <i class="fa-solid fa-chart-line"></i>
+
+            </div>
+
+            <div>
+
+                <span>Compliance Rate</span>
+
+                <strong id="complianceRate">
+                    0%
+                </strong>
+
+                <small>
+                    Overall rate
+                </small>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- LOWER GRID -->
+
+    <div class="dashboard-grid">
+
+
+        <!-- RECENT INSPECTIONS -->
+
+        <div class="content-card large-card">
+
+            <div class="card-header">
+
+                <div>
+
+                    <h2>
+                        Recent Inspections
+                    </h2>
+
+                    <p>
+                        Latest product compliance checks
+                    </p>
+
+                </div>
+
+
+                <button
+                    class="text-button"
+                    data-section="reports">
+
+                    View All
+
+                    <i class="fa-solid fa-arrow-right"></i>
+
+                </button>
+
+            </div>
+
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Product</th>
+
+                            <th>Date</th>
+
+                            <th>Status</th>
+
+                            <th>Action</th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody
+                        id="recentInspectionTable">
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+
+        <!-- QUICK ACTIONS -->
+
+        <div class="content-card">
+
+            <div class="card-header">
+
+                <div>
+
+                    <h2>
+                        Quick Actions
+                    </h2>
+
+                    <p>
+                        Common inspection tasks
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="quick-actions">
+
+
+                <button data-section="scan">
+
+                    <div class="quick-icon blue">
+
+                        <i class="fa-solid fa-camera"></i>
+
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            Scan Product
+                        </strong>
+
+                        <span>
+                            Upload product image
+                        </span>
+
+                    </div>
+
+                    <i class="fa-solid fa-chevron-right"></i>
+
+                </button>
+
+
+                <button data-section="reports">
+
+                    <div class="quick-icon green">
+
+                        <i class="fa-solid fa-file-lines"></i>
+
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            Inspection Reports
+                        </strong>
+
+                        <span>
+                            View all inspection reports
+                        </span>
+
+                    </div>
+
+                    <i class="fa-solid fa-chevron-right"></i>
+
+                </button>
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- COMPLIANCE OVERVIEW -->
+
+    <div class="content-card overview-card">
+
+        <div class="card-header">
+
+            <div>
+
+                <h2>
+                    Compliance Overview
+                </h2>
+
+                <p>
+                    Current inspection performance
+                </p>
+
+            </div>
+
+            <span class="overview-period">
+                Overall
+            </span>
+
+        </div>
+
+
+        <div class="compliance-overview">
+
+
+            <div class="compliance-score">
+
+                <strong id="overviewPercentage">
+                    0%
+                </strong>
+
+                <span>
+                    Compliance Rate
+                </span>
+
+            </div>
+
+
+            <div class="compliance-progress">
+
+
+                <div class="progress-label">
+
+                    <span>
+                        Compliant Products
+                    </span>
+
+                    <strong id="overviewText">
+                        0 of 0
+                    </strong>
+
+                </div>
+
+
+                <div class="progress-bar">
+
+                    <div
+                        class="progress-fill"
+                        id="progressFill">
+                    </div>
+
+                </div>
+
+
+                <div class="progress-legend">
+
+                    <span>
+
+                        <i class="green-dot"></i>
+
+                        Compliant
+
+                    </span>
+
+
+                    <span>
+
+                        <i class="red-dot"></i>
+
+                        Non-Compliant
+
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+</section>
+
+
+<!-- =====================================================
+     SCAN PRODUCT
+===================================================== -->
+
+<section
+    id="scan"
+    class="page-section">
+
+
+    <div class="page-header">
+
+        <div>
+
+            <h1>
+                Scan Product
+            </h1>
+
+            <p>
+                Upload a product image to check compliance.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="scan-layout">
+
+
+        <!-- UPLOAD -->
+
+        <div class="content-card scan-card">
+
+
+            <div class="scan-card-title">
+
+                <div class="scan-title-icon">
+
+                    <i class="fa-solid fa-camera"></i>
+
+                </div>
+
+
+                <div>
+
+                    <h2>
+                        Product Image
+                    </h2>
+
+                    <p>
+                        Upload a clear image of the package.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div
+                class="upload-area"
+                id="uploadArea">
+
+
+                <div class="upload-icon">
+
+                    <i class="fa-solid fa-cloud-arrow-up"></i>
+
+                </div>
+
+
+                <h3>
+                    Upload Product Image
+                </h3>
+
+
+                <p>
+                    Drag and drop your image here
+                    or select a file.
+                </p>
+
+
+                <label class="upload-button">
+
+                    <i class="fa-solid fa-folder-open"></i>
+
+                    Choose Image
+
+                    <input
+                        type="file"
+                        id="productImage"
+                        accept="image/*"
+                        hidden>
+
+                </label>
+
+
+                <small>
+                    Supported: JPG, JPEG, PNG · Max 10 MB
+                </small>
+
+            </div>
+
+
+            <div
+                class="image-preview"
+                id="imagePreview">
+            </div>
+
+
+            <div class="scan-actions">
+
+                <button
+                    class="secondary-button"
+                    id="removeImageButton">
+
+                    Remove
+
+                </button>
+
+
+                <button
+                    class="primary-button"
+                    id="analyzeButton"
+                    disabled>
+
+                    <i class="fa-solid fa-magnifying-glass"></i>
+
+                    Analyze Product
+
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- HOW IT WORKS -->
+
+        <div class="content-card">
+
+            <div class="card-header">
+
+                <div>
+
+                    <h2>
+                        How It Works
+                    </h2>
+
+                    <p>
+                        Three simple steps
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="process-steps">
+
+
+                <div class="process-step">
+
+                    <div class="step-number">
+                        1
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            Upload
+                        </strong>
+
+                        <p>
+                            Upload a clear product label image.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="process-step">
+
+                    <div class="step-number">
+                        2
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            Analyze
+                        </strong>
+
+                        <p>
+                            OCR extracts declarations
+                            from the package.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="process-step">
+
+                    <div class="step-number">
+                        3
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            Verify
+                        </strong>
+
+                        <p>
+                            Mandatory declarations are
+                            checked against the rules.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ANALYSIS RESULT -->
+
+    <div
+        class="content-card analysis-result"
+        id="analysisResult">
+
+
+        <div class="result-header">
+
+            <div>
+
+                <h2>
+                    Compliance Result
+                </h2>
+
+                <p>
+                    Product analysis result
+                </p>
+
+            </div>
+
+
+            <span
+                class="result-status"
+                id="resultStatus">
+                -
+            </span>
+
+        </div>
+
+
+        <div class="declaration-grid">
+
+
+            <div class="declaration-item">
+
+                <span>
+                    Product
+                </span>
+
+                <strong id="resultProduct">
+                    -
+                </strong>
+
+            </div>
+
+
+            <div class="declaration-item">
+
+                <span>
+                    Manufacturer
+                </span>
+
+                <strong id="resultManufacturer">
+                    -
+                </strong>
+
+            </div>
+
+
+            <div class="declaration-item">
+
+                <span>
+                    Net Quantity
+                </span>
+
+                <strong id="resultQuantity">
+                    -
+                </strong>
+
+            </div>
+
+
+            <div class="declaration-item">
+
+                <span>
+                    MRP
+                </span>
+
+                <strong id="resultMRP">
+                    -
+                </strong>
+
+            </div>
+
+
+            <div class="declaration-item">
+
+                <span>
+                    Manufacturing Date
+                </span>
+
+                <strong id="resultManufacturingDate">
+                    -
+                </strong>
+
+            </div>
+
+
+            <div class="declaration-item">
+
+                <span>
+                    Batch
+                </span>
+
+                <strong id="resultBatch">
+                    -
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <div class="issues-container">
+
+            <h3>
+                Compliance Issues
+            </h3>
+
+            <div id="resultIssues">
+                No issues detected.
+            </div>
+
+        </div>
+
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     COMBINED INSPECTION REPORTS
+===================================================== -->
+
+<section
+    id="reports"
+    class="page-section">
+
+
+    <div class="page-header">
+
+        <div>
+
+            <h1>
+                Inspection Reports
+            </h1>
+
+            <p>
+                View complete product inspection history
+                and compliance reports.
+            </p>
+
+        </div>
+
+
+        <button
+            class="primary-button"
+            id="generateReportButton">
+
+            <i class="fa-solid fa-file-circle-plus"></i>
+
+            Generate Report
+
+        </button>
+
+    </div>
+
+
+    <div class="content-card">
+
+
+        <!-- FILTERS -->
+
+        <div class="filter-row">
+
+
+            <div class="search-box">
+
+                <i class="fa-solid fa-magnifying-glass"></i>
+
+                <input
+                    type="text"
+                    id="reportSearch"
+                    placeholder="Search product, ID, manufacturer...">
+
+            </div>
+
+
+            <select id="reportStatusFilter">
+
+                <option value="all">
+                    All Status
+                </option>
+
+                <option value="compliant">
+                    Compliant
+                </option>
+
+                <option value="non-compliant">
+                    Non-Compliant
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <!-- COMBINED TABLE -->
+
+        <div class="table-wrapper report-table-wrapper">
+
+            <table class="inspection-report-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>Report ID</th>
+
+                        <th>Product</th>
+
+                        <th>Manufacturer</th>
+
+                        <th>Net Quantity</th>
+
+                        <th>MRP</th>
+
+                        <th>Date</th>
+
+                        <th>Status</th>
+
+                        <th>Action</th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody id="reportsTable">
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     PROFILE
+===================================================== -->
+
+<section
+    id="profile"
+    class="page-section">
+
+
+    <div class="page-header">
+
+        <div>
+
+            <h1>
+                Profile
+            </h1>
+
+            <p>
+                Manage your inspector account.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="profile-layout">
+
+
+        <div class="content-card profile-card">
+
+            <div class="large-avatar">
+
+                <i class="fa-solid fa-user"></i>
+
+            </div>
+
+
+            <h2 id="profileName">
+                Inspector
+            </h2>
+
+
+            <span class="role-badge">
+                Inspector
+            </span>
+
+
+            <p id="profileEmail">
+                inspector@example.com
+            </p>
+
+        </div>
+
+
+        <div class="content-card">
+
+
+            <div class="card-header">
+
+                <div>
+
+                    <h2>
+                        Account Information
+                    </h2>
+
+                    <p>
+                        Your registered account details
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="profile-details">
+
+
+                <div class="profile-field">
+
+                    <label>
+                        Full Name
+                    </label>
+
+                    <div id="profileFullName">
+                        Inspector
+                    </div>
+
+                </div>
+
+
+                <div class="profile-field">
+
+                    <label>
+                        Email Address
+                    </label>
+
+                    <div id="profileEmailDetail">
+                        inspector@example.com
+                    </div>
+
+                </div>
+
+
+                <div class="profile-field">
+
+                    <label>
+                        Account Type
+                    </label>
+
+                    <div>
+                        Inspector
+                    </div>
+
+                </div>
+
+
+                <div class="profile-field">
+
+                    <label>
+                        Account Status
+                    </label>
+
+                    <div class="account-status">
+
+                        <i class="fa-solid fa-circle"></i>
+
+                        Active
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+</main>
+
+
+<script src="dashbord.js"></script>
+
+</body>
+
+</html>
