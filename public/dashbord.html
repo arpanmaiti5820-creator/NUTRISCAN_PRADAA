@@ -7,7 +7,7 @@
     <meta name="viewport"
         content="width=device-width, initial-scale=1.0">
 
-    <title>LM Check - Compliance Dashboard</title>
+    <title>NutriScan - Compliance Dashboard</title>
 
     <!-- Google Font -->
     <link rel="preconnect"
@@ -25,6 +25,8 @@
     <link
         rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+        <!-- jsPDF - Complaint PDF Generator -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
     <!-- Dashboard CSS -->
     <link rel="stylesheet" href="dashbord.css">
@@ -46,7 +48,7 @@
 
         <div class="brand-text">
 
-            <h2>LM Check</h2>
+            <h2>NutriScan</h2>
 
             <span>
                 Legal Metrology Compliance
@@ -1006,8 +1008,72 @@
         </div>
 
 
+
+    </div>
+    <!-- =====================================================
+     SEPARATE COMPLAINT REPORT
+===================================================== -->
+
+<div
+    class="content-card complaint-report-card"
+    id="complaintReportCard"
+    style="display: none;">
+
+    <div class="complaint-report-header">
+
+        <div>
+            <span class="complaint-label">
+                COMPLIANCE ACTION
+            </span>
+
+            <h2>
+                <i class="fa-solid fa-triangle-exclamation"></i>
+                Complaint Report
+            </h2>
+
+            <p>
+                A compliance concern was detected during
+                product inspection.
+            </p>
+        </div>
+
+        <div class="complaint-icon">
+            <i class="fa-solid fa-file-circle-exclamation"></i>
+        </div>
+
     </div>
 
+
+    <div
+        class="complaint-summary"
+        id="complaintSummary">
+    </div>
+
+
+    <div class="complaint-actions">
+
+        <button
+            class="secondary-button"
+            id="viewComplaintReportButton">
+
+            <i class="fa-solid fa-eye"></i>
+
+            View Complaint Report
+        </button>
+
+
+        <button
+            class="primary-button"
+            id="generateComplaintReportButton">
+
+            <i class="fa-solid fa-file-pdf"></i>
+
+            Generate Complaint PDF
+        </button>
+
+    </div>
+
+</div>
 </section>
 
 

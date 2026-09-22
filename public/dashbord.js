@@ -120,6 +120,29 @@ const historyStatusFilter =
 const historyTable =
     document.getElementById("historyTable");
 
+/* ============================================================
+   COMPLAINT REPORT REFERENCES
+============================================================ */
+
+const complaintReportCard =
+    document.getElementById("complaintReportCard");
+
+const complaintSummary =
+    document.getElementById("complaintSummary");
+
+const generateComplaintReportButton =
+    document.getElementById(
+        "generateComplaintReportButton"
+    );
+
+const viewComplaintReportButton =
+    document.getElementById(
+        "viewComplaintReportButton"
+    );
+
+
+/* Latest analyzed product/report */
+let latestComplaintRecord = null;
 
 /* ============================================================
    5. USER INFORMATION
@@ -4016,11 +4039,15 @@ if (analyzeButton) {
                    Save
                 */
 
-                createInspectionRecord(
+               const inspectionRecord =
+                    createInspectionRecord(
                     product,
                     compliance
                 );
-
+                
+                showComplaintReport(
+                    inspectionRecord
+                );
 
                 /*
                    Refresh dashboard
@@ -4707,7 +4734,122 @@ if (historyStatusFilter) {
 
 }
 
+/* ============================================================
+   COMPLAINT REPORT
+   Separate from Inspection Report
+============================================================ */
 
+function showComplaintReport(record) {
+
+    if (!complaintReportCard) {
+        return;
+    }
+
+    const issues =
+        Array.isArray(record.issues)
+            ? record.issues
+            : [];
+
+
+    /*
+       Only show complaint report when
+       an actual GAP or FAIL exists.
+    */
+
+    if (issues.length === 0) {
+
+        complaintReportCard.style.display = "none";
+
+        latestComplaintRecord = null;
+
+        return;
+    }
+
+
+    latestComplaintRecord = record;
+
+
+    complaintReportCard.style.display = "block";
+
+
+    const issueHTML =
+        issues
+            .map(issue => {
+
+                const status =
+                    issue.status || "GAP";
+
+                return `
+                    <div class="complaint-issue-item">
+
+                        <strong>
+                            ${escapeHTML(
+                                issue.ruleId || "Rule"
+                            )}
+                            -
+                            ${escapeHTML(
+                                issue.title ||
+                                "Compliance Requirement"
+                            )}
+                        </strong>
+
+                        <span>
+                            <b>Status:</b>
+                            ${escapeHTML(status)}
+                        </span>
+
+                        <span>
+                            <b>Legal Reference:</b>
+                            ${escapeHTML(
+                                issue.legalReference ||
+                                "Not available"
+                            )}
+                        </span>
+
+                        <span>
+                            <b>Evidence:</b>
+                            ${escapeHTML(
+                                issue.evidence ||
+                                "No evidence detected"
+                            )}
+                        </span>
+
+                        <span>
+                            <b>Explanation:</b>
+                            ${escapeHTML(
+                                issue.explanation ||
+                                "Manual verification required."
+                            )}
+                        </span>
+
+                    </div>
+                `;
+            })
+            .join("");
+
+
+    complaintSummary.innerHTML = `
+
+        <div class="complaint-summary-box">
+
+            <strong>
+                ⚠ ${issues.length}
+                compliance concern${issues.length > 1 ? "s" : ""}
+                detected
+            </strong>
+
+            <p style="margin-top:8px;font-size:13px;color:#7f1d1d;">
+                The inspection identified missing declarations
+                or declarations that did not pass the configured
+                compliance checks.
+            </p>
+
+        </div>
+
+        ${issueHTML}
+
+    `;
+}
 /* ============================================================
    47. VIEW REPORT
    ============================================================ */
@@ -5426,6 +5568,850 @@ window.viewReport =
     viewReport;
 
 
+
+/* ============================================================
+   CREATE COMPLAINT PDF
+============================================================ */
+
+function createComplaintPDF(record) {
+
+    if (!record) {
+        alert("No complaint report is available.");
+        return null;
+    }
+
+
+    if (
+        !window.jspdf ||
+        !window.jspdf.jsPDF
+    ) {
+        alert(
+            "PDF library could not be loaded. " +
+            "Please check your internet connection."
+        );
+
+        return null;
+    }
+
+
+    const {
+        jsPDF
+    } = window.jspdf;
+
+
+    const doc =
+        new jsPDF({
+            orientation: "portrait",
+            unit: "mm",
+            format: "a4"
+        });
+
+
+    const pageWidth =
+        doc.internal.pageSize.getWidth();
+
+    const pageHeight =
+        doc.internal.pageSize.getHeight();
+
+
+    const margin = 18;
+
+    let y = 20;
+
+
+    /*
+       HEADER
+    */
+
+    doc.setFontSize(20);
+
+    doc.setFont("helvetica", "bold");
+
+    doc.text(
+        "NutriScan",
+        margin,
+        y
+    );
+
+
+    y += 8;
+
+
+    doc.setFontSize(14);
+
+    doc.text(
+        "COMPLAINT / COMPLIANCE CONCERN REPORT",
+        margin,
+        y
+    );
+
+
+    y += 7;
+
+
+    doc.setFontSize(9);
+
+    doc.setFont("helvetica", "normal");
+
+    doc.text(
+        "Legal Metrology Product Inspection",
+        margin,
+        y
+    );
+
+
+    y += 10;
+
+
+    /*
+       REPORT INFORMATION
+    */
+
+    doc.setDrawColor(
+        210,
+        210,
+        210
+    );
+
+    doc.line(
+        margin,
+        y,
+        pageWidth - margin,
+        y
+    );
+
+
+    y += 9;
+
+
+    const reportId =
+        `CMP-${String(
+            record.id || ""
+        ).replace(
+            "INS-",
+            ""
+        )}`;
+
+
+    const inspectionId =
+        record.id || "-";
+
+
+    const inspectionDate =
+        formatDate(
+            record.date
+        );
+
+
+    const inspector =
+        record.inspector ||
+        "Inspector";
+
+
+    doc.setFontSize(10);
+
+    doc.setFont(
+        "helvetica",
+        "bold"
+    );
+
+
+    doc.text(
+        "Complaint Report ID:",
+        margin,
+        y
+    );
+
+    doc.setFont(
+        "helvetica",
+        "normal"
+    );
+
+    doc.text(
+        reportId,
+        65,
+        y
+    );
+
+
+    y += 6;
+
+
+    doc.setFont(
+        "helvetica",
+        "bold"
+    );
+
+    doc.text(
+        "Inspection ID:",
+        margin,
+        y
+    );
+
+    doc.setFont(
+        "helvetica",
+        "normal"
+    );
+
+    doc.text(
+        inspectionId,
+        65,
+        y
+    );
+
+
+    y += 6;
+
+
+    doc.setFont(
+        "helvetica",
+        "bold"
+    );
+
+    doc.text(
+        "Inspection Date:",
+        margin,
+        y
+    );
+
+    doc.setFont(
+        "helvetica",
+        "normal"
+    );
+
+    doc.text(
+        inspectionDate,
+        65,
+        y
+    );
+
+
+    y += 6;
+
+
+    doc.setFont(
+        "helvetica",
+        "bold"
+    );
+
+    doc.text(
+        "Inspector:",
+        margin,
+        y
+    );
+
+    doc.setFont(
+        "helvetica",
+        "normal"
+    );
+
+    doc.text(
+        String(inspector),
+        65,
+        y
+    );
+
+
+    y += 10;
+
+
+    /*
+       PRODUCT DETAILS
+    */
+
+    doc.setFont(
+        "helvetica",
+        "bold"
+    );
+
+    doc.setFontSize(13);
+
+    doc.text(
+        "1. Product Details",
+        margin,
+        y
+    );
+
+
+    y += 8;
+
+
+    doc.setFontSize(10);
+
+
+    const productDetails = [
+
+        [
+            "Product Name",
+            record.productName ||
+            "Not Detected"
+        ],
+
+        [
+            "Manufacturer",
+            record.manufacturer ||
+            "Not Detected"
+        ],
+
+        [
+            "Net Quantity",
+            record.quantity ||
+            "Not Detected"
+        ],
+
+        [
+            "MRP",
+            record.mrp ||
+            "Not Detected"
+        ],
+
+        [
+            "Manufacturing Date",
+            record.manufacturingDate ||
+            "Not Detected"
+        ],
+
+        [
+            "Expiry / Use By",
+            record.expiry ||
+            "Not Detected"
+        ],
+
+        [
+            "Batch Number",
+            record.batch ||
+            "Not Detected"
+        ],
+
+        [
+            "Address",
+            record.address ||
+            "Not Detected"
+        ],
+
+        [
+            "FSSAI",
+            record.fssai ||
+            "Not Detected"
+        ],
+
+        [
+            "Barcode",
+            record.barcode ||
+            "Not Detected"
+        ]
+
+    ];
+
+
+    for (
+        const [label, value]
+        of productDetails
+    ) {
+
+        doc.setFont(
+            "helvetica",
+            "bold"
+        );
+
+        doc.text(
+            `${label}:`,
+            margin,
+            y
+        );
+
+
+        doc.setFont(
+            "helvetica",
+            "normal"
+        );
+
+
+        const valueLines =
+            doc.splitTextToSize(
+                String(value),
+                120
+            );
+
+
+        doc.text(
+            valueLines,
+            65,
+            y
+        );
+
+
+        y +=
+            Math.max(
+                6,
+                valueLines.length * 5
+            );
+
+
+        if (y > pageHeight - 30) {
+
+            doc.addPage();
+
+            y = 20;
+        }
+    }
+
+
+    /*
+       COMPLAINT DETAILS
+    */
+
+    y += 5;
+
+
+    doc.setFont(
+        "helvetica",
+        "bold"
+    );
+
+    doc.setFontSize(13);
+
+    doc.text(
+        "2. Detected Compliance Concerns",
+        margin,
+        y
+    );
+
+
+    y += 8;
+
+
+    doc.setFontSize(10);
+
+
+    const issues =
+        Array.isArray(record.issues)
+            ? record.issues
+            : [];
+
+
+    issues.forEach(
+        (issue, index) => {
+
+            if (
+                y > pageHeight - 45
+            ) {
+
+                doc.addPage();
+
+                y = 20;
+            }
+
+
+            doc.setFont(
+                "helvetica",
+                "bold"
+            );
+
+            doc.text(
+                `${index + 1}. ${
+                    issue.ruleId ||
+                    "Rule"
+                } - ${
+                    issue.title ||
+                    "Compliance Requirement"
+                }`,
+                margin,
+                y
+            );
+
+
+            y += 6;
+
+
+            doc.setFont(
+                "helvetica",
+                "normal"
+            );
+
+
+            const details = [
+
+                `Status: ${
+                    issue.status ||
+                    "GAP"
+                }`,
+
+                `Severity: ${
+                    issue.severity ||
+                    "Not specified"
+                }`,
+
+                `Legal Reference: ${
+                    issue.legalReference ||
+                    "Not available"
+                }`,
+
+                `Requirement: ${
+                    issue.requirement ||
+                    "Not available"
+                }`,
+
+                `Evidence: ${
+                    issue.evidence ||
+                    "No evidence detected"
+                }`,
+
+                `Explanation: ${
+                    issue.explanation ||
+                    "Manual verification required."
+                }`
+
+            ];
+
+
+            details.forEach(
+                detail => {
+
+                    const lines =
+                        doc.splitTextToSize(
+                            detail,
+                            pageWidth -
+                            margin * 2
+                        );
+
+
+                    doc.text(
+                        lines,
+                        margin + 4,
+                        y
+                    );
+
+
+                    y +=
+                        Math.max(
+                            5,
+                            lines.length * 4.5
+                        );
+
+
+                    if (
+                        y >
+                        pageHeight - 30
+                    ) {
+
+                        doc.addPage();
+
+                        y = 20;
+                    }
+
+                }
+            );
+
+
+            y += 4;
+        }
+    );
+
+
+    /*
+       CONCLUSION
+    */
+
+    if (
+        y > pageHeight - 45
+    ) {
+
+        doc.addPage();
+
+        y = 20;
+    }
+
+
+    doc.setFont(
+        "helvetica",
+        "bold"
+    );
+
+    doc.setFontSize(13);
+
+    doc.text(
+        "3. Inspection Conclusion",
+        margin,
+        y
+    );
+
+
+    y += 8;
+
+
+    doc.setFont(
+        "helvetica",
+        "normal"
+    );
+
+    doc.setFontSize(10);
+
+
+    const conclusion =
+        "The product inspection identified " +
+        `${issues.length} compliance concern(s) ` +
+        "based on the declarations detected " +
+        "from the submitted product image. " +
+        "This report records the detected concern(s) " +
+        "for inspection and further verification.";
+
+
+    const conclusionLines =
+        doc.splitTextToSize(
+            conclusion,
+            pageWidth -
+            margin * 2
+        );
+
+
+    doc.text(
+        conclusionLines,
+        margin,
+        y
+    );
+
+
+    y +=
+        conclusionLines.length *
+        5 + 10;
+
+
+    /*
+       IMPORTANT NOTICE
+    */
+
+    doc.setFont(
+        "helvetica",
+        "italic"
+    );
+
+    doc.setFontSize(8);
+
+
+    const notice =
+        "This complaint report is generated from OCR-based " +
+        "inspection results and configured compliance rules. " +
+        "The detected concern should be manually verified " +
+        "before regulatory action is taken.";
+
+
+    const noticeLines =
+        doc.splitTextToSize(
+            notice,
+            pageWidth -
+            margin * 2
+        );
+
+
+    doc.text(
+        noticeLines,
+        margin,
+        pageHeight - 22
+    );
+
+
+    /*
+       FOOTER
+    */
+
+    doc.setFont(
+        "helvetica",
+        "normal"
+    );
+
+    doc.setFontSize(8);
+
+
+    doc.text(
+        "NutriScan | Legal Metrology Compliance System",
+        margin,
+        pageHeight - 10
+    );
+
+
+    return doc;
+}
+
+/* ============================================================
+   GENERATE COMPLAINT PDF
+============================================================ */
+
+if (generateComplaintReportButton) {
+
+    generateComplaintReportButton.addEventListener(
+        "click",
+        function () {
+
+            if (!latestComplaintRecord) {
+
+                alert(
+                    "No compliance concern is available."
+                );
+
+                return;
+            }
+
+
+            const doc =
+                createComplaintPDF(
+                    latestComplaintRecord
+                );
+
+
+            if (!doc) {
+                return;
+            }
+
+
+            const reportId =
+                `CMP-${String(
+                    latestComplaintRecord.id || ""
+                ).replace(
+                    "INS-",
+                    ""
+                )}`;
+
+
+            doc.save(
+                `${reportId}-Complaint-Report.pdf`
+            );
+
+        }
+    );
+
+}
+
+/* ============================================================
+   VIEW COMPLAINT PDF
+============================================================ */
+
+if (viewComplaintReportButton) {
+
+    viewComplaintReportButton.addEventListener(
+        "click",
+        function () {
+
+            if (!latestComplaintRecord) {
+
+                alert(
+                    "No complaint report is available."
+                );
+
+                return;
+            }
+
+
+            const doc =
+                createComplaintPDF(
+                    latestComplaintRecord
+                );
+
+
+            if (!doc) {
+                return;
+            }
+
+
+            const pdfBlob =
+                doc.output("blob");
+
+
+            const pdfURL =
+                URL.createObjectURL(
+                    pdfBlob
+                );
+
+
+            const modal =
+                document.createElement(
+                    "div"
+                );
+
+
+            modal.className =
+                "complaint-pdf-modal";
+
+
+            modal.innerHTML = `
+
+                <div class="complaint-pdf-window">
+
+                    <div class="complaint-pdf-header">
+
+                        <h3>
+                            <i class="fa-solid fa-file-pdf"></i>
+                            Complaint Report
+                        </h3>
+
+                        <button
+                            class="complaint-pdf-close"
+                            id="closeComplaintPDF">
+
+                            <i class="fa-solid fa-xmark"></i>
+
+                        </button>
+
+                    </div>
+
+
+                    <iframe
+                        class="complaint-pdf-frame"
+                        src="${pdfURL}">
+                    </iframe>
+
+                </div>
+
+            `;
+
+
+            document.body.appendChild(
+                modal
+            );
+
+
+            const closeButton =
+                document.getElementById(
+                    "closeComplaintPDF"
+                );
+
+
+            function closePDFViewer() {
+
+                modal.remove();
+
+                URL.revokeObjectURL(
+                    pdfURL
+                );
+
+            }
+
+
+            closeButton.addEventListener(
+                "click",
+                closePDFViewer
+            );
+
+
+            modal.addEventListener(
+                "click",
+                function (event) {
+
+                    if (
+                        event.target === modal
+                    ) {
+
+                        closePDFViewer();
+
+                    }
+
+                }
+            );
+
+        }
+    );
+
+}
 /* ============================================================
    END OF DASHBOARD.JS
    ============================================================ */

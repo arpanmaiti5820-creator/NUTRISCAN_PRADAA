@@ -1689,3 +1689,222 @@ tbody tr:hover {
     }
 
 }
+
+/* ============================================================
+   SEPARATE COMPLAINT REPORT
+============================================================ */
+
+.complaint-report-card {
+    margin-top: 22px;
+    border: 1px solid #fecaca;
+    background: #fff;
+}
+
+
+.complaint-report-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    padding-bottom: 18px;
+    border-bottom: 1px solid #fee2e2;
+}
+
+
+.complaint-label {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: #dc2626;
+    margin-bottom: 7px;
+}
+
+
+.complaint-report-header h2 {
+    font-size: 19px;
+    color: #991b1b;
+}
+
+
+.complaint-report-header h2 i {
+    margin-right: 7px;
+}
+
+
+.complaint-report-header p {
+    margin-top: 7px;
+    font-size: 13px;
+    color: #7f1d1d;
+}
+
+
+.complaint-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 12px;
+    background: #fef2f2;
+    color: #dc2626;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 22px;
+    flex-shrink: 0;
+}
+
+
+.complaint-summary {
+    margin-top: 18px;
+}
+
+
+.complaint-summary-box {
+    padding: 15px;
+    border-radius: 10px;
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+}
+
+
+.complaint-summary-box strong {
+    color: #991b1b;
+}
+
+
+.complaint-issue-item {
+    margin-top: 12px;
+    padding: 14px;
+    border-radius: 9px;
+    background: #ffffff;
+    border: 1px solid #fee2e2;
+}
+
+
+.complaint-issue-item strong {
+    display: block;
+    color: #172033;
+    margin-bottom: 5px;
+}
+
+
+.complaint-issue-item span {
+    display: block;
+    font-size: 12px;
+    color: #64748b;
+    line-height: 1.5;
+}
+
+
+.complaint-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+    padding-top: 18px;
+    border-top: 1px solid #f1f5f9;
+}
+
+
+.complaint-actions .secondary-button {
+    border: 1px solid #fecaca;
+    color: #b91c1c;
+    background: #fff;
+}
+
+
+.complaint-actions .secondary-button:hover {
+    background: #fef2f2;
+}
+
+
+/* ============================================================
+   COMPLAINT PDF VIEWER
+============================================================ */
+
+.complaint-pdf-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 5000;
+
+    background: rgba(15, 23, 42, 0.75);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 25px;
+}
+
+
+.complaint-pdf-window {
+    width: min(1100px, 100%);
+    height: min(850px, 95vh);
+
+    background: #ffffff;
+    border-radius: 14px;
+
+    display: flex;
+    flex-direction: column;
+
+    overflow: hidden;
+
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+}
+
+
+.complaint-pdf-header {
+    min-height: 62px;
+    padding: 0 18px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    border-bottom: 1px solid #e5e7eb;
+}
+
+
+.complaint-pdf-header h3 {
+    font-size: 15px;
+}
+
+
+.complaint-pdf-close {
+    border: none;
+    background: transparent;
+    cursor: pointer;
+
+    font-size: 20px;
+    color: #64748b;
+}
+
+
+.complaint-pdf-frame {
+    flex: 1;
+    width: 100%;
+    border: none;
+    background: #f1f5f9;
+}
+
+
+@media (max-width: 700px) {
+
+    .complaint-actions {
+        flex-direction: column;
+    }
+
+    .complaint-actions button {
+        width: 100%;
+    }
+
+    .complaint-pdf-modal {
+        padding: 10px;
+    }
+
+    .complaint-pdf-window {
+        height: 96vh;
+    }
+
+}

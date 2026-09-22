@@ -6,6 +6,14 @@ const legalMetrologyRules = require("./rules/legal-metrology-rules");
 dotenv.config();
 
 const app = express();
+
+const path = require("path");
+
+app.use(express.static(path.join(__dirname, "public")));
+app.get("/", (req, res) => {
+    res.sendFile(path.join(__dirname, "public", "dashbord.html"));
+});
+
 const PORT = process.env.PORT || 3000;
 const OCR_API_KEY = process.env.OCR_API_KEY;
 
@@ -134,17 +142,25 @@ app.post("/api/ocr", upload.single("file"), async (req, res) => {
 
 async function callOCR(formData) {
     const response = await fetch(
-        "https://api.ocr.space/parse/image",
-        {
-            method: "POST",
-            body: formData
-        }
+    "https://api.ocr.space/parse/image",
+    {
+        method: "POST",
+        headers: {
+            "apikey": OCR_API_KEY
+        },
+        body: formData
+    }
     );
 
     if (!response.ok) {
-        throw new Error(
-            `OCR service returned HTTP ${response.status}`
-        );
+    const errorText = await response.text();
+
+    console.error("OCR HTTP STATUS:", response.status);
+    console.error("OCR RESPONSE:", errorText);
+
+    throw new Error(
+        `OCR service returned HTTP ${response.status}`
+    );
     }
 
     return await response.json();
