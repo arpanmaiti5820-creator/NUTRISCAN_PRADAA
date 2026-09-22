@@ -20,7 +20,7 @@ const OCR_API_KEY = process.env.OCR_API_KEY;
 if (!OCR_API_KEY) {
     console.warn("WARNING: OCR_API_KEY is missing in .env");
 }
-
+#filesize
 const upload = multer({
     limits: {
         fileSize: 10 * 1024 * 1024
