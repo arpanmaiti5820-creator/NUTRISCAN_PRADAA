@@ -1,6 +1,34 @@
+# Dependencies
 node_modules/
+
+# Environment / secrets
+.env
+.env.*
+
+# Large datasets
 datasets/
 lmcheck-dataset/
-runs/
-.env
+
+# Generated YOLO/model outputs
+runs/detect/
+
+# VS Code settings
 .vscode/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Model weights / large files
+*.pt
+*.pth
+*.onnx
+*.h5
+*.pkl
+*.joblib
+
+# Logs
+*.log
