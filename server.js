@@ -13,7 +13,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, "public", "dashbord.html"));
 });
-
+#API KEY
 const PORT = process.env.PORT || 3000;
 const OCR_API_KEY = process.env.OCR_API_KEY;
 
